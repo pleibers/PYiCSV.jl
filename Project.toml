@@ -1,0 +1,13 @@
+name = "iCSV"
+uuid = "a947b93a-73a6-4986-95bf-5299b82f6468"
+authors = ["Patrick Leibersperger <patrick.leibersperger@slf.ch>"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1.9"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
