@@ -8,16 +8,16 @@ end
 
 location(latitude::Float64, longitude::Float64, elevation=nothing) = Location(longitude, latitude, elevation)
 
-struct Metadata
+mutable struct Metadata
     field_delimiter::String
     geometry::String
     srid::String  # Assuming SRID is an Integer
     station_id::Union{String,Nothing}
-    nodata::Union{Any,Nothing}
-    timezone::Union{Any,Nothing}
+    nodata::Union{Union{String,Real},Nothing}
+    timezone::Union{Union{String,Real},Nothing}
     doi::Union{String,Nothing}
     timestamp_meaning::Union{String,Nothing}
-    additional_metadata::Dict{String,Any}
+    additional_metadata::Dict{String,Union{String,Real}}
 end
 
 function Metadata(field_delimiter::String, location::Location;
@@ -62,31 +62,25 @@ function Metadata(dict::Dict)
     known_keys = ["field_delimiter", "geometry", "srid",
                   "station_id", "nodata", "timezone", "doi",
                   "timestamp_meaning"]
-    additional_metadata = Dict{String,Any}(
-        k => v for (k,v) in dict if k ∉ known_keys
-    )
+    additional_metadata = Dict{String,Any}(k => v for (k, v) in dict if k ∉ known_keys)
 
-    return Metadata(
-        field_delimiter,
-        geometry,
-        srid,
-        station_id,
-        nodata,
-        timezone,
-        doi,
-        timestamp_meaning,
-        additional_metadata
-    )
+    return Metadata(field_delimiter,
+                    geometry,
+                    srid,
+                    station_id,
+                    nodata,
+                    timezone,
+                    doi,
+                    timestamp_meaning,
+                    additional_metadata)
 end
 
 function to_dict(metadata::Metadata)
-    # Create base dictionary from struct fields
-    dict = Dict{String,Any}("field_delimiter" => metadata.field_delimiter,
-                            "geometry" => metadata.geometry,
-                            "srid" => metadata.srid)
+    # Create initial empty dictionary
+    dict = Dict{String,Union{String,Real}}()
 
-    # Add optional fields if they're not nothing
-    for field in (:station_id, :nodata, :timezone, :doi, :timestamp_meaning)
+    # Iterate through all field names except additional_metadata
+    for field in fieldnames(Metadata)[1:(end - 1)]  # Exclude additional_metadata
         value = getfield(metadata, field)
         if value !== nothing
             dict[String(field)] = value
@@ -110,8 +104,8 @@ end
 
 const OptionalFields = Union{Nothing,Vector{String}}
 
-struct Fields
-    field::Vector{String}
+mutable struct Fields
+    fields::Vector{String}
     units_multiplier::OptionalFields
     units::OptionalFields
     long_name::OptionalFields
@@ -151,33 +145,29 @@ function Fields(dict::Dict)
     # Get additional fields (any key not used for main parameters)
     known_keys = ["field", "units_multiplier", "units",
                   "long_name", "standard_name"]
-    additional_fields = Dict{String,Any}(
-        k => v for (k,v) in dict if k ∉ known_keys
-    )
+    additional_fields = Dict{String,Any}(k => v for (k, v) in dict if k ∉ known_keys)
 
-    return Fields(
-        fields,
-        units_multiplier,
-        units,
-        long_name,
-        standard_name,
-        additional_fields
-    )
+    return Fields(fields,
+                  units_multiplier,
+                  units,
+                  long_name,
+                  standard_name,
+                  additional_fields)
 end
 
 function to_dict(fields::Fields)
-    # Create base dictionary from struct fields
-    dict = Dict{String,Vector{String}}("field" => fields.field)
+    # Create initial empty dictionary
+    dict = Dict{String,Vector}()
 
-    # Add optional fields if they're not nothing
-    for field in (:units_multiplier, :units, :long_name, :standard_name)
+    # Iterate through all field names except additional_metadata
+    for field in fieldnames(Fields)[1:(end - 1)]  # Exclude additional_metadata
         value = getfield(fields, field)
         if value !== nothing
             dict[String(field)] = value
         end
     end
 
-    # Merge with additional fields
+    # Merge with additional metadata
     merge!(dict, fields.additional_fields)
 
     return dict

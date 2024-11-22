@@ -4,14 +4,14 @@ include("init.jl")
 
 include("header.jl")
 # Write your package code here.
-struct icsv
+struct ICSV
     metadata::Metadata
     fields::Fields
-    data::Dict{String,Any}
+    data::Dict{String,Vector{Any}}
 end
 
 include("read.jl")
 include("write.jl")
 
-export icsv
+export ICSV
 end

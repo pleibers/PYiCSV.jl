@@ -1,0 +1,29 @@
+function save(file::ICSV, filename::String; overwrite=true)
+    if isfile(filename)
+        if !overwrite
+            @warn "File $filename already exists. Not overwriting."
+            return false
+        end
+        @info "File $filename already exists. Overwriting."
+    end
+    py_file = snowpat.icsv.iCSVFile()
+    data = pd.DataFrame(file.data)
+    metadata = snowpat.icsv.MetaDataSection()
+    metadata_dict = to_dict(file.metadata)
+    for key in keys(metadata_dict)
+        metadata.set_attribute(key, metadata_dict[key])
+    end
+
+    fields = snowpat.icsv.FieldsSection()
+    fields_dict = to_dict(file.fields)
+    for key in keys(fields_dict)
+        fields.set_attribute(key, fields_dict[key])
+    end
+
+    py_file.metadata = metadata
+    py_file.fields = fields
+    py_file.setData(data)
+
+    py_file.write(filename)
+    return true
+end

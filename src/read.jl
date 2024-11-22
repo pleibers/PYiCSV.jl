@@ -1,5 +1,5 @@
 
-function read(filename::String)::icsv
+function read(filename::String)::ICSV
     if !isfile(filename)
         throw(ArgumentError("File not found: $filename"))
     end
@@ -12,7 +12,7 @@ function read(filename::String)::icsv
 
     data = convertPandasToJulia(file.data)
 
-    return icsv(metadata, fields, data)
+    return ICSV(metadata, fields, data)
 end
 
 function convertPandasToJulia(dataframe::PyObject)
