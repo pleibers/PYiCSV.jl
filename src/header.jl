@@ -8,6 +8,30 @@ end
 
 location(latitude::Float64, longitude::Float64, elevation=nothing) = Location(longitude, latitude, elevation)
 
+"""
+    Metadata
+
+A mutable structure containing metadata information for a timeseries dataset.
+
+# Fields
+- `field_delimiter::String`: Character used to separate fields in the data
+- `geometry::String`: WKT representation of the location
+- `srid::String`: Spatial reference system identifier
+- `station_id::Union{String,Nothing}`: Optional identifier for the measurement station
+- `nodata::Union{Union{String,Real},Nothing}`: Value used to represent missing data
+- `timezone::Union{Union{String,Real},Nothing}`: Timezone information for timestamps
+- `doi::Union{String,Nothing}`: Digital Object Identifier for the dataset
+- `timestamp_meaning::Union{String,Nothing}`: Interpretation of timestamp values
+- `additional_metadata::Dict{String,Union{String,Real}}`: Additional key-value metadata pairs
+
+# Constructors
+    Metadata(field_delimiter::String, location::Location; kwargs...)
+    Metadata(dict::Dict)
+
+Create a Metadata instance either from a field delimiter and Location object with optional
+keyword arguments, or from a dictionary containing metadata fields. Required fields when
+constructing from a dictionary are "field_delimiter", "geometry", and "srid".
+"""
 mutable struct Metadata
     field_delimiter::String
     geometry::String
@@ -104,6 +128,27 @@ end
 
 const OptionalFields = Union{Nothing,Vector{String}}
 
+"""
+    Fields
+
+A mutable structure containing field information for a timeseries dataset.
+
+# Fields
+- `fields::Vector{String}`: Names of the data fields
+- `units_multiplier::OptionalFields`: Optional multipliers for unit conversions
+- `units::OptionalFields`: Optional units for each field
+- `long_name::OptionalFields`: Optional descriptive names for each field
+- `standard_name::OptionalFields`: Optional standardized names for each field
+- `additional_fields::Dict{String,Any}`: Additional field-related metadata
+
+# Constructors
+    Fields(fields::Vector{String}; kwargs...)
+    Fields(dict::Dict)
+
+Create a Fields instance either from a vector of field names with optional keyword arguments,
+or from a dictionary containing field information. The only required field when constructing
+from a dictionary is "fields" containing the vector of field names.
+"""
 mutable struct Fields
     fields::Vector{String}
     units_multiplier::OptionalFields

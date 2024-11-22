@@ -1,4 +1,17 @@
+"""
+    read(filename::String)::ICSV
 
+Read an ICSV file from the given filename and return an ICSV object.
+
+# Arguments
+- `filename::String`: Path to the ICSV file to read
+
+# Returns
+- `ICSV`: An ICSV object containing the file's metadata, fields, and data
+
+# Throws
+- `ArgumentError`: If the specified file does not exist
+"""
 function read(filename::String)::ICSV
     if !isfile(filename)
         throw(ArgumentError("File not found: $filename"))
