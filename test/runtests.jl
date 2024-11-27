@@ -1,24 +1,29 @@
 using Test
 using PYiCSV
 
-@testset "iCSV.jl" begin
-    @testset "Reading CSV" begin
-        file = PYiCSV.read("test.icsv")
-        @test file.metadata.field_delimiter == ";"
-        @test length(file.data["TA"]) > 0
-    end
+# Only run tests if all dependencies are available
+if PYiCSV.check_dependencies()
+    @testset "iCSV.jl" begin
+        @testset "Reading CSV" begin
+            file = PYiCSV.read("test.icsv")
+            @test file.metadata.field_delimiter == ";"
+            @test length(file.data["TA"]) > 0
+        end
 
-    @testset "Writing CSV" begin
-        written_data = PYiCSV.read("test.icsv")
-        written_data.metadata.field_delimiter = ","
-        PYiCSV.save("test_output.icsv", written_data)
-        read_data = PYiCSV.read("test_output.icsv")
-        @test written_data.metadata.field_delimiter == read_data.metadata.field_delimiter
-        @test keys(written_data.data) == keys(read_data.data)
-        rm("test_output.icsv")
-    end
+        @testset "Writing CSV" begin
+            written_data = PYiCSV.read("test.icsv")
+            written_data.metadata.field_delimiter = ","
+            PYiCSV.save("test_output.icsv", written_data)
+            read_data = PYiCSV.read("test_output.icsv")
+            @test written_data.metadata.field_delimiter == read_data.metadata.field_delimiter
+            @test keys(written_data.data) == keys(read_data.data)
+            rm("test_output.icsv")
+        end
 
-    @testset "Error Handling" begin
-        @test_throws ArgumentError PYiCSV.read("non_existent_file.csv")
+        @testset "Error Handling" begin
+            @test_throws ArgumentError PYiCSV.read("non_existent_file.csv")
+        end
     end
+else
+    @warn "Skipping tests due to missing dependencies. Please install required packages first."
 end
