@@ -21,7 +21,7 @@ function check_pycall_conda_alignment()
         @warn "PyCall is not using Conda's Python. Rebuilding PyCall..."
         # Force rebuild of PyCall
         Pkg.build("PyCall")
-        throw(InitError(:iCSV, "PyCall rebuilt to use Conda's Python. Please restart Julia and try again."))
+        throw(InitError(:PYiCSV, "PyCall rebuilt to use Conda's Python. Please restart Julia and try again."))
     end
     return true
 end
@@ -86,15 +86,16 @@ function ensure_pandas()
     return true
 end
 
+
 function __init__()
     check_pycall_conda_alignment()
     installed_sp = ensure_snowpat()
     installed_pd = ensure_pandas()
     if !installed_sp
-        throw(InitError(:iCSV, "snowpat installed. Please restart Julia and try again."))
+        throw(InitError(:PYiCSV, "snowpat installed. Please restart Julia and try again."))
     end
     if !installed_pd
-        throw(InitError(:iCSV, "pandas installed. Please restart Julia and try again."))
+        throw(InitError(:PYiCSV, "pandas installed. Please restart Julia and try again."))
     end
     return nothing
 end
