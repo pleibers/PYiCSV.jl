@@ -1,17 +1,17 @@
 """
-    save(filename::String, file::ICSV; overwrite=true) -> Bool
+    save(filename::String, file::iCSV; overwrite=true) -> Bool
 
-Save an ICSV file to disk at the specified `filename`.
+Save an iCSV file to disk at the specified `filename`.
 
 # Arguments
 - `filename::String`: Path where the file should be saved
-- `file::ICSV`: The ICSV file object to save
+- `file::iCSV`: The iCSV file object to save
 - `overwrite::Bool=true`: Whether to overwrite existing file at path
 
 # Returns
 - `Bool`: `true` if file was successfully saved, `false` if saving was skipped due to existing file and `overwrite=false`
 """
-function save(filename::String, file::ICSV; overwrite=true)
+function save(filename::String, file::iCSV; overwrite=true)
     if isfile(filename)
         if !overwrite
             @warn "File $filename already exists. Not overwriting."

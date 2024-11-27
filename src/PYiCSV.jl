@@ -1,17 +1,17 @@
 """
-    iCSV
+    PYiCSV
 
-A Julia wrapper module for the Python iCSV library, providing functionality to read and write
+A Julia wrapper module for the Python iCSV library (part of snowpat), providing functionality to read and write
 iCSV (Interoperable Comma-Separated Values) files.
 
 The module provides a high-level interface to work with iCSV files through three main types:
-- `ICSV`: The main structure representing an iCSV file with metadata, fields, and data
+- `iCSV`: The main structure representing an iCSV file with metadata, fields, and data
 - `Metadata`: Contains metadata information for the dataset
 - `Fields`: Contains field definitions and properties
 
 # Main Functions
-- `read(filename::String)`: Read an iCSV file and return an ICSV object
-- `save(filename::String, file::ICSV; overwrite=true)`: Save an ICSV object to a file
+- `read(filename::String)`: Read an iCSV file and return an iCSV object
+- `save(filename::String, file::iCSV; overwrite=true)`: Save an iCSV object to a file
 
 # Example
 ```julia
@@ -30,13 +30,13 @@ and `pandas` installed. These dependencies are automatically managed through Jul
 
 See also: [iCSV Format Specification](https://envidat.gitlab-pages.wsl.ch/icsv/)
 """
-module iCSV
+module PYiCSV
 
 include("init.jl")
 
 include("header.jl")
 # Write your package code here.
-struct ICSV
+struct iCSV
     metadata::Metadata
     fields::Fields
     data::Dict{String,Vector{Any}}
@@ -45,6 +45,6 @@ end
 include("read.jl")
 include("write.jl")
 
-export ICSV, Metadata, Fields
+export iCSV, Metadata, Fields
 # read, save not exported to avoid naming clashes
 end

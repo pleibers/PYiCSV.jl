@@ -1,18 +1,18 @@
 """
-    read(filename::String)::ICSV
+    read(filename::String)::iCSV
 
-Read an ICSV file from the given filename and return an ICSV object.
+Read an ICSV file from the given filename and return an iCSV object.
 
 # Arguments
-- `filename::String`: Path to the ICSV file to read
+- `filename::String`: Path to the iCSV file to read
 
 # Returns
-- `ICSV`: An ICSV object containing the file's metadata, fields, and data
+- `iCSV`: An iCSV object containing the file's metadata, fields, and data
 
 # Throws
 - `ArgumentError`: If the specified file does not exist
 """
-function read(filename::String)::ICSV
+function read(filename::String)::iCSV
     if !isfile(filename)
         throw(ArgumentError("File not found: $filename"))
     end
@@ -25,7 +25,7 @@ function read(filename::String)::ICSV
 
     data = convertPandasToJulia(file.data)
 
-    return ICSV(metadata, fields, data)
+    return iCSV(metadata, fields, data)
 end
 
 function convertPandasToJulia(dataframe::PyObject)

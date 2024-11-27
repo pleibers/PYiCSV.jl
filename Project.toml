@@ -1,4 +1,4 @@
-name = "iCSV"
+name = "PYiCSV"
 uuid = "a947b93a-73a6-4986-95bf-5299b82f6468"
 authors = ["Patrick Leibersperger <patrick.leibersperger@slf.ch>"]
 version = "1.0.0-DEV"
@@ -10,6 +10,9 @@ PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
 
 [compat]
 julia = "1.9"
+Conda = "^1.10.2"
+PyCall = "^1.96.4"
+Pkg = "^1.9.0"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
