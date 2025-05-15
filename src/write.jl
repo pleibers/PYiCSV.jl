@@ -41,7 +41,7 @@ function save(filename::String, file::iCSV{D}; overwrite=true) where D <: Dict{S
     return true
 end
 
-function save(filename::String, file::iCSV{D}; overwrite=true) where D <: Dict{Dates.DateTime, Dict{String, Vector{Any}}}
+function save(filename::String, file::iCSV{D}; overwrite=true) where D <: Dict{Dates.DateTime, MD} where MD
     if isfile(filename)
         if !overwrite
             @warn "File $filename already exists. Not overwriting."
