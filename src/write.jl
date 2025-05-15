@@ -70,3 +70,11 @@ function save(filename::String, file::iCSV{D}; overwrite=true) where D <: Dict{D
     py_file.write(filename)
     return true
 end
+
+function append_to_profile(filename::String, date::Dates.DateTime, data::MD) where MD
+    if !isfile(filename)
+        throw(ArgumentError("File not found: $filename"))
+    end
+    snowpat.icsv.append_timepoint(filename, date, pd.DataFrame(data))
+    return true
+end

@@ -3,7 +3,7 @@ using Conda
 using Pkg: Pkg
 
 const SNOWPAT_NAME = "snowpat"
-const SNOWPAT_MIN_VERSION = "0.8.4"
+const SNOWPAT_MIN_VERSION = "0.8.5"
 const SNOWPAT_MAX_VERSION = "1.0.0"
 const snowpat = PyNULL()
 const pd = PyNULL()

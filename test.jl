@@ -20,3 +20,5 @@ date = Dates.DateTime("2025-05-15T16:00:00")
 file_new = iCSV(profile.metadata, profile.fields, Dict(date => data))
 
 PYiCSV.save("test_out_profile_new.icsv", file_new)
+
+PYiCSV.append_to_profile("test_out_profile_new.icsv", date, data)
