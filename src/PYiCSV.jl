@@ -31,15 +31,16 @@ and `pandas` installed. These dependencies are automatically managed through Jul
 See also: [iCSV Format Specification](https://envidat.gitlab-pages.wsl.ch/icsv/)
 """
 module PYiCSV
+using Dates
 
 include("init.jl")
 
 include("header.jl")
 # Write your package code here.
-struct iCSV
+struct iCSV{D <: Dict}
     metadata::Metadata
     fields::Fields
-    data::Dict{String,Vector{Any}}
+    data::D
 end
 
 include("read.jl")
