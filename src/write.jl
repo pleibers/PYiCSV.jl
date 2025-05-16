@@ -75,6 +75,6 @@ function append_to_profile(filename::String, date::Dates.DateTime, data::MD, fie
     if !isfile(filename)
         throw(ArgumentError("File not found: $filename"))
     end
-    snowpat.icsv.append_timepoint(filename, date, pd.DataFrame(data))
+    snowpat.icsv.append_timepoint(filename, date, pd.DataFrame(data), field_delimiter)
     return true
 end
