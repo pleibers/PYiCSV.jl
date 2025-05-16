@@ -11,7 +11,7 @@ Save an iCSV file to disk at the specified `filename`.
 # Returns
 - `Bool`: `true` if file was successfully saved, `false` if saving was skipped due to existing file and `overwrite=false`
 """
-function save(filename::String, file::iCSV{D}; overwrite=true) where D <: Dict{String, Vector{Any}}
+function save(filename::String, file::iCSV{D}; overwrite=true) where {D<:Dict{String,Vector{Any}}}
     if isfile(filename)
         if !overwrite
             @warn "File $filename already exists. Not overwriting."
@@ -41,7 +41,7 @@ function save(filename::String, file::iCSV{D}; overwrite=true) where D <: Dict{S
     return true
 end
 
-function save(filename::String, file::iCSV{D}; overwrite=true) where D <: Dict{Dates.DateTime, MD} where MD
+function save(filename::String, file::iCSV{D}; overwrite=true) where {D<:Dict{Dates.DateTime,MD}} where {MD}
     if isfile(filename)
         if !overwrite
             @warn "File $filename already exists. Not overwriting."
@@ -71,7 +71,7 @@ function save(filename::String, file::iCSV{D}; overwrite=true) where D <: Dict{D
     return true
 end
 
-function append_to_profile(filename::String, date::Dates.DateTime, data::MD) where MD
+function append_to_profile(filename::String, date::Dates.DateTime, data::MD, field_delimiter) where {MD}
     if !isfile(filename)
         throw(ArgumentError("File not found: $filename"))
     end
