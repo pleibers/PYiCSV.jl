@@ -47,7 +47,7 @@ end
 function Metadata(field_delimiter::String, location::Location;
                   station_id=nothing, nodata=nothing,
                   timezone=nothing, doi=nothing, timestamp_meaning=nothing,
-                  additional_metadata::Dict{String,Any}=Dict())
+                  additional_metadata::Dict{String,Any}=Dict{String,Any}())
     geometry = createGeometryString(location)
 
     return Metadata(field_delimiter,
@@ -163,7 +163,7 @@ function Fields(fields::Vector{String};
                 units::OptionalFields=nothing,
                 long_name::OptionalFields=nothing,
                 standard_name::OptionalFields=nothing,
-                additional_fields::Dict{String,Any}=Dict())
+                additional_fields::Dict{String,Any}=Dict{String,Any}())
     return Fields(fields,
                   units_multiplier,
                   units,
