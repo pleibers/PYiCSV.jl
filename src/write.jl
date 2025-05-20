@@ -41,6 +41,18 @@ function save(filename::String, file::iCSV{D}; overwrite=true) where {D<:Dict{St
     return true
 end
 
+function append_data_line(filename::String, field_delimiter::String, data::V) where {V<:AbstractVector}
+    open(filename, "a") do io
+        for i in 1:length(data)
+            print(io, data[i])
+            if i < length(data)
+                print(io, field_delimiter)
+            end
+        end
+        println(io)
+    end
+end
+
 function save(filename::String, file::iCSV{D}; overwrite=true) where {D<:Dict{Dates.DateTime,MD}} where {MD}
     if isfile(filename)
         if !overwrite
@@ -49,7 +61,7 @@ function save(filename::String, file::iCSV{D}; overwrite=true) where {D<:Dict{Da
         end
         @info "File $filename already exists. Overwriting."
     end
-    py_file = snowpat.icsv.iCSVSnowprofile()
+    py_file = snowpat.icsv.iCSV2DTimeseries()
     metadata = snowpat.icsv.MetaDataSection()
     metadata_dict = to_dict(file.metadata)
     for key in keys(metadata_dict)

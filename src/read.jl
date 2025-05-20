@@ -22,16 +22,16 @@ function read(filename::String)::iCSV
     meta_dict = Dict(file.metadata.metadata)
     fields = Fields(field_dict)
     metadata = Metadata(meta_dict)
-    if pyisinstance(file, snowpat.icsv.iCSVSnowprofile)
-        data = convertSnowProfileToJulia(file)
+    if pyisinstance(file, snowpat.icsv.iCSV2DTimeseries)
+        data = convertProfileToJulia(file)
     else
         data = convertPandasToJulia(file.data)
     end
     return iCSV(metadata, fields, data)
 end
 
-function convertSnowProfileToJulia(file::PyObject)
-    out = Dict{Dates.DateTime,Dict{String, Vector{Any}}}()
+function convertProfileToJulia(file::PyObject)
+    out = Dict{Dates.DateTime,Dict{String,Vector{Any}}}()
     for date in file.dates
         out[date] = convertPandasToJulia(file.data[date])
     end
