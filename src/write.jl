@@ -19,8 +19,17 @@ function save(filename::String, file::iCSV{D}; overwrite=true) where {D<:Dict{St
         end
         @info "File $filename already exists. Overwriting."
     end
+    has_vector = any(x -> isa(x, AbstractArray), values(file.data))
+    has_scalar = any(x -> !isa(x, AbstractArray), values(file.data))
+    if has_vector && has_scalar
+        throw(ArgumentError("Cannot save file with both vector and scalar data."))
+    end
+    if has_vector
+        data = pd.DataFrame(file.data)
+    else
+        data = pd.DataFrame(file.data, index=[0])
+    end
     py_file = snowpat.icsv.iCSVFile()
-    data = pd.DataFrame(file.data)
     metadata = snowpat.icsv.MetaDataSection()
     metadata_dict = to_dict(file.metadata)
     for key in keys(metadata_dict)
