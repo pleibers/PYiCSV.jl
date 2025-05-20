@@ -11,7 +11,7 @@ Save an iCSV file to disk at the specified `filename`.
 # Returns
 - `Bool`: `true` if file was successfully saved, `false` if saving was skipped due to existing file and `overwrite=false`
 """
-function save(filename::String, file::iCSV{D}; overwrite=true) where {D<:Dict{String,Vector{Any}}}
+function save(filename::String, file::iCSV{D}; overwrite=true) where {D<:Dict{String,A}} where {A}
     if isfile(filename)
         if !overwrite
             @warn "File $filename already exists. Not overwriting."
@@ -41,13 +41,16 @@ function save(filename::String, file::iCSV{D}; overwrite=true) where {D<:Dict{St
     return true
 end
 
-function append_data_line(filename::String, field_delimiter::String, data::V) where {V<:AbstractVector}
+function append_data_line(filename::String, field_delimiter::String,
+                          data::D) where {D<:Dict{String,A}} where {A}
     open(filename, "a") do io
-        for i in 1:length(data)
-            print(io, data[i])
-            if i < length(data)
+        count = 1
+        for (key, val) in data
+            print(io, val)
+            if count < length(data)
                 print(io, field_delimiter)
             end
+            count += 1
         end
         println(io)
     end
