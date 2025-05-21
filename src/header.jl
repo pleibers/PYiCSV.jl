@@ -47,7 +47,7 @@ end
 function Metadata(field_delimiter::String, location::Location;
                   station_id=nothing, nodata=nothing,
                   timezone=nothing, doi=nothing, timestamp_meaning=nothing,
-                  additional_metadata::Dict{String,Any}=Dict{String,Any}())
+                  additional_metadata::Dict{String,String}=Dict{String,String}())
     geometry = createGeometryString(location)
 
     return Metadata(field_delimiter,
