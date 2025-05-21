@@ -101,7 +101,7 @@ end
 
 function to_dict(metadata::Metadata)
     # Create initial empty dictionary
-    dict = Dict{String,String}()
+    dict = Dict{String,Union{String,Real}}()
 
     # Iterate through all field names except additional_metadata
     for field in fieldnames(Metadata)[1:(end - 1)]  # Exclude additional_metadata
