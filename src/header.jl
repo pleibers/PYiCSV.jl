@@ -41,7 +41,7 @@ mutable struct Metadata
     timezone::Union{Union{String,Real},Nothing}
     doi::Union{String,Nothing}
     timestamp_meaning::Union{String,Nothing}
-    additional_metadata::Dict{String,Union{String,Real}}
+    additional_metadata::Dict{String,String}
 end
 
 function Metadata(field_delimiter::String, location::Location;
@@ -86,7 +86,7 @@ function Metadata(dict::Dict)
     known_keys = ["field_delimiter", "geometry", "srid",
                   "station_id", "nodata", "timezone", "doi",
                   "timestamp_meaning"]
-    additional_metadata = Dict{String,Any}(k => v for (k, v) in dict if k ∉ known_keys)
+    additional_metadata = Dict{String,String}(k => v for (k, v) in dict if k ∉ known_keys)
 
     return Metadata(field_delimiter,
                     geometry,
@@ -101,7 +101,7 @@ end
 
 function to_dict(metadata::Metadata)
     # Create initial empty dictionary
-    dict = Dict{String,Union{String,Real}}()
+    dict = Dict{String,String}()
 
     # Iterate through all field names except additional_metadata
     for field in fieldnames(Metadata)[1:(end - 1)]  # Exclude additional_metadata
@@ -155,7 +155,7 @@ mutable struct Fields
     units::OptionalFields
     long_name::OptionalFields
     standard_name::OptionalFields
-    additional_fields::Dict{String,Any}
+    additional_fields::Dict{String,Vector{String}}
 end
 
 function Fields(fields::Vector{String};
@@ -163,7 +163,7 @@ function Fields(fields::Vector{String};
                 units::OptionalFields=nothing,
                 long_name::OptionalFields=nothing,
                 standard_name::OptionalFields=nothing,
-                additional_fields::Dict{String,Any}=Dict{String,Any}())
+                additional_fields::Dict{String,Vector{String}}=Dict{String,Vector{String}}())
     return Fields(fields,
                   units_multiplier,
                   units,
@@ -190,7 +190,7 @@ function Fields(dict::Dict)
     # Get additional fields (any key not used for main parameters)
     known_keys = ["field", "units_multiplier", "units",
                   "long_name", "standard_name"]
-    additional_fields = Dict{String,Any}(k => v for (k, v) in dict if k ∉ known_keys)
+    additional_fields = Dict{String,Vector{String}}(k => v for (k, v) in dict if k ∉ known_keys)
 
     return Fields(fields,
                   units_multiplier,
@@ -202,7 +202,7 @@ end
 
 function to_dict(fields::Fields)
     # Create initial empty dictionary
-    dict = Dict{String,Vector}()
+    dict = Dict{String,Vector{String}}()
 
     # Iterate through all field names except additional_metadata
     for field in fieldnames(Fields)[1:(end - 1)]  # Exclude additional_metadata
