@@ -36,7 +36,32 @@ using Dates
 include("init.jl")
 
 include("header.jl")
-# Write your package code here.
+"""
+    iCSV{D<:Dict}
+
+Main container for an iCSV file. Wraps the dataset's `metadata`, `fields`, and `data` in
+Julia-native types while interoperating with the Python snowpat/iCSV ecosystem.
+
+# Fields
+- `metadata::Metadata`: Global dataset metadata (delimiter, geometry/SRID, station_id, etc.).
+- `fields::Fields`: Field definitions and attributes (names, units, long_name, standard_name, …).
+- `data::D`: Payload in one of the supported layouts below.
+
+# Accepted `data` layouts
+- `Dict{String,Vector}`: Columnar table; keys are field names and values are equal-length vectors.
+- `Dict{String,<:Any}`: Single-row table; keys are field names and values are scalars.
+- `Dict{Dates.DateTime,Dict{String,Vector}}`: 2D timeseries/profile; outer keys are timestamps and
+  each value is a columnar table for that time.
+
+# Construction
+    iCSV(metadata::Metadata, fields::Fields, data::D)
+
+Typically obtained via `read(filename::String)`. Persist using `save(filename, file; overwrite=true)`.
+
+# Notes
+- Do not mix scalar and vector values in the same flat `Dict` layout.
+- The parametric type `D` captures the concrete dictionary shape for performance and clarity.
+"""
 struct iCSV{D <: Dict}
     metadata::Metadata
     fields::Fields
